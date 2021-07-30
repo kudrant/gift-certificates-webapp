@@ -4,35 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GiftCertificate {
-    private int id;
+    private Integer id;
     private String name;
     private String description;
     private double price;
-    private Integer duration;
+    private int duration;
     private List<Tag> tags = new ArrayList<>();
 
     public GiftCertificate() {
 
     }
 
-    public GiftCertificate(String name, String description, double price, Integer duration) {
+    public GiftCertificate(String name, String description, double price, int duration) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.duration = duration;
     }
 
-    public GiftCertificate(int id, String name, String description, double price, Integer duration) {
+    public GiftCertificate(Integer id, String name, String description, double price, int duration) {
         this(name, description, price, duration);
         this.id = id;
     }
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -56,15 +56,15 @@ public class GiftCertificate {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public Integer getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(Integer duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 

@@ -57,7 +57,7 @@ class GiftCertificateDAOTest {
 
     @Test
     void delete() {
-        int result = dao.delete(7);
+        int result = dao.delete(15);
         assertTrue(result > 0);
     }
 
