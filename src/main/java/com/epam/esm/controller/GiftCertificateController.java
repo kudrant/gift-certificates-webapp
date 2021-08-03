@@ -53,7 +53,7 @@ public class GiftCertificateController {
         return model;
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ModelAndView deleteGiftCertificate(@RequestParam("id") int id) {
         giftCertificateDAO.delete(id);
         return new ModelAndView("redirect:/");
