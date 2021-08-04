@@ -27,6 +27,10 @@ public class GiftCertificate {
         this.id = id;
     }
 
+    public boolean hasTags() {
+        return !this.getTags().isEmpty();
+    }
+
 
     public Integer getId() {
         return id;
