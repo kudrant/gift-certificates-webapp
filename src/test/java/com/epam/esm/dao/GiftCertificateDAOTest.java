@@ -1,5 +1,6 @@
 package com.epam.esm.dao;
 
+import com.epam.esm.dao.impl.GiftCertificateDaoImpl;
 import com.epam.esm.model.GiftCertificate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GiftCertificateDAOTest {
     private DriverManagerDataSource dataSource;
-    private GiftCertificateDAO dao;
+    private GiftCertificateDao dao;
 
     @BeforeEach
     void setupBeforeEach() {
@@ -21,7 +22,7 @@ class GiftCertificateDAOTest {
         dataSource.setUsername("postgres");
         dataSource.setPassword("1Qawsed");
 
-        dao = new GiftCertificateDAOImpl(dataSource);
+        dao = new GiftCertificateDaoImpl(dataSource);
     }
 
 
@@ -37,7 +38,7 @@ class GiftCertificateDAOTest {
 
     @Test
     void update() {
-        GiftCertificate cert = new GiftCertificate(5, "EPAM-Update", "Middle To Senior Promotion", 50.0, 180);
+        GiftCertificate cert = new GiftCertificate(5L, "EPAM-Update", "Middle To Senior Promotion", 50.0, 180);
         int result = dao.update(cert);
 
         assertTrue(result > 0);

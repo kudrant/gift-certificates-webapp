@@ -1,7 +1,9 @@
 package com.epam.esm.config;
 
-import com.epam.esm.dao.GiftCertificateDAO;
-import com.epam.esm.dao.GiftCertificateDAOImpl;
+import com.epam.esm.dao.GiftCertificateDao;
+import com.epam.esm.dao.TagDao;
+import com.epam.esm.dao.impl.GiftCertificateDaoImpl;
+import com.epam.esm.dao.impl.TagDaoImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -56,7 +58,12 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 
 
     @Bean
-    public GiftCertificateDAO getGiftCertificateDAO() {
-        return new GiftCertificateDAOImpl(getDataSource());
+    public GiftCertificateDao getGiftCertificateDAO() {
+        return new GiftCertificateDaoImpl(getDataSource());
+    }
+
+    @Bean
+    public TagDao getTagDao() {
+        return new TagDaoImpl(getDataSource());
     }
 }

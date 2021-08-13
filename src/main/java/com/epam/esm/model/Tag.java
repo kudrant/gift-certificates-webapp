@@ -2,27 +2,16 @@ package com.epam.esm.model;
 
 
 public class Tag {
-    private int id;
+    long id;
     private String name;
-
-
-    public Tag(int id, String name) {
-        this.id = id;
-        this.name = name;
-
-    }
 
     public Tag(String name) {
         this.name = name;
     }
     public Tag() {}
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public Tag(long id, String name) {
+        this.name = name;
     }
 
     public String getName() {

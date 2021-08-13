@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GiftCertificate {
-    private Integer id;
+    private Long id;
     private String name;
     private String description;
     private double price;
@@ -22,9 +22,14 @@ public class GiftCertificate {
         this.duration = duration;
     }
 
-    public GiftCertificate(Integer id, String name, String description, double price, int duration) {
+    public GiftCertificate(Long id, String name, String description, double price, int duration) {
         this(name, description, price, duration);
         this.id = id;
+    }
+
+    public GiftCertificate(Long id, String name, String description, double price, int duration, List<Tag> tags) {
+        this(id, name, description, price, duration);
+        this.tags = tags;
     }
 
     public boolean hasTags() {
@@ -32,11 +37,11 @@ public class GiftCertificate {
     }
 
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -4,15 +4,15 @@ import com.epam.esm.model.GiftCertificate;
 
 import java.util.List;
 
-public interface GiftCertificateDAO {
+public interface GiftCertificateDao {
 
     int save(GiftCertificate certificate);
 
     int update(GiftCertificate certificate);
 
-    GiftCertificate get(Integer id);
+    GiftCertificate get(long id);
 
-    int delete(Integer id);
+    int delete(long id);
 
     List<GiftCertificate> list();
 
