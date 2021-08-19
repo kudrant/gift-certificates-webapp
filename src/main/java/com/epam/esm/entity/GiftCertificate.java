@@ -1,7 +1,4 @@
-package com.epam.esm.model;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.epam.esm.entity;
 
 public class GiftCertificate {
     private Long id;
@@ -9,7 +6,9 @@ public class GiftCertificate {
     private String description;
     private double price;
     private int duration;
-    private List<Tag> tags = new ArrayList<>();
+
+
+    //private List<Tag> tags = new ArrayList<>();
 
     public GiftCertificate() {
 
@@ -22,19 +21,31 @@ public class GiftCertificate {
         this.duration = duration;
     }
 
+
+
     public GiftCertificate(Long id, String name, String description, double price, int duration) {
         this(name, description, price, duration);
         this.id = id;
     }
 
-    public GiftCertificate(Long id, String name, String description, double price, int duration, List<Tag> tags) {
-        this(id, name, description, price, duration);
-        this.tags = tags;
-    }
+//    public GiftCertificate(Long id, String name, String description, double price, int duration, List<Tag> tags) {
+//        this(id, name, description, price, duration);
+//        this.tags = tags;
+//    }
 
-    public boolean hasTags() {
-        return !this.getTags().isEmpty();
-    }
+//    public GiftCertificate(Long id,
+//                           String name,
+//                           String description,
+//                           double price,
+//                           int duration,
+//                           ZonedDateTime createDate,
+//                           ZonedDateTime lastUpdateDate) {
+//        this(id, name, description, price, duration);
+//    }
+
+//    public boolean hasTags() {
+//        return !this.getTags().isEmpty();
+//    }
 
 
     public Long getId() {
@@ -77,13 +88,6 @@ public class GiftCertificate {
         this.duration = duration;
     }
 
-    public List<Tag> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
-    }
 
     @Override
     public String toString() {
@@ -92,8 +96,6 @@ public class GiftCertificate {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
-                ", duration=" + duration +
-                ", tags=" + tags +
-                '}';
+                ", duration=" + duration + '}';
     }
 }

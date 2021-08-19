@@ -1,16 +1,21 @@
 package com.epam.esm.service;
 
-import com.epam.esm.model.Tag;
+import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Tag;
 
 import java.util.List;
+import java.util.Set;
 
 public interface TagService {
 
-    int getTagById(Long id);
+    Tag getTagById(Long id);
 
-    int saveTag(Tag tag);
 
-    int deleteTag(Long id);
+    Tag saveTag(Tag tag);
 
-    List<Tag> listTags();
+    void deleteTag(Long id);
+
+    List<Tag> getTags();
+
+    Set<Tag> getCertificateTags(GiftCertificate cert);
 }

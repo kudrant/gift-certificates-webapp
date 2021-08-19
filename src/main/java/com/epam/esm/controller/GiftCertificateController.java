@@ -1,9 +1,11 @@
 package com.epam.esm.controller;
 
-import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.model.GiftCertificate;
+import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.exception.GiftCertificateControllerException;
 import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.service.dto.GiftCertificateDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +16,6 @@ import java.util.List;
 
 @RestController
 public class GiftCertificateController {
-
-//    @Autowired
-//    private GiftCertificateService giftCertificateService;
 
     private final GiftCertificateService giftCertificateService;
 
@@ -35,7 +34,7 @@ public class GiftCertificateController {
         return model;
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
+    @GetMapping("/new")
     public ModelAndView newGiftCertificate(ModelAndView model) {
         GiftCertificate giftCertificate = new GiftCertificate();
         model.addObject("giftCertificate", giftCertificate);
@@ -43,37 +42,49 @@ public class GiftCertificateController {
         return model;
     }
 
-    @GetMapping ("/get")
+    @GetMapping ("/{id}")
     @ResponseBody
-    public ResponseEntity<GiftCertificate> getGiftCertificate(@RequestParam("id") long id) {
+    public ResponseEntity<GiftCertificate> getGiftCertificate(@PathVariable long id) {
         return new ResponseEntity<>(giftCertificateService.getGiftCertificateById(id), HttpStatus.OK);
     }
 
 
     @PostMapping ("/add")
-    public ResponseEntity<Void> addGiftCertificate(@RequestBody GiftCertificate giftCertificate) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public GiftCertificate addGiftCertificate(@RequestBody GiftCertificateDto giftCertificateDto) {
 
-        int result = giftCertificateService.saveGiftCertificate(giftCertificate);
-        if (result <= 0)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        try {
+            return giftCertificateService.saveGiftCertificate(giftCertificateDto);
+        } catch (DuplicateKeyException e) {
+            throw new GiftCertificateControllerException("Name is already exist", 40001, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @DeleteMapping ("/delete")
-    public ResponseEntity<Void> deleteGiftCertificate(@RequestParam("id") int id) {
-        int result = giftCertificateService.deleteGiftCertificate(id);
-        if (result <= 0)
+    @PutMapping ("/update")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<GiftCertificateDto> updateGiftCertificate(@RequestBody GiftCertificateDto giftCertificateDto) {
+
+        GiftCertificate giftCertificate = giftCertificateService.updateGiftCertificate(giftCertificateDto);
+        if (giftCertificate ==null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        giftCertificateDto.setGiftCertificate(giftCertificate);
+        return new ResponseEntity<>(giftCertificateDto, HttpStatus.OK);
+    }
+
+    @DeleteMapping ("/{id}")
+    public ResponseEntity<Void> deleteGiftCertificate(@PathVariable long id) {
+        giftCertificateService.deleteGiftCertificate(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/edit")
-    public ResponseEntity<Void> editGiftCertificate(@RequestBody GiftCertificate giftCertificate) {
+    @GetMapping("/search")
+    public List<GiftCertificateDto> search(@RequestParam(defaultValue = "", required = false) String tagName,
+                                           @RequestParam(defaultValue = "", required = false) String nameOrDescPart,
+                                           @RequestParam(defaultValue = "name", required = false) String orderColumn,
+                                           @RequestParam(defaultValue = "false", required = false) boolean descending) {
 
-        int result = giftCertificateService.updateGiftCertificate(giftCertificate);
-        if (result <= 0)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return giftCertificateService.search(tagName, nameOrDescPart, orderColumn, descending);
     }
+
 
 }
