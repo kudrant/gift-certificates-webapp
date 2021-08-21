@@ -6,6 +6,7 @@ import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.dto.GiftCertificateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,6 @@ public class GiftCertificateController {
     }
 
 
-
     @RequestMapping(value = "/")
     public ModelAndView listGiftCertificates(ModelAndView model) {
         List<GiftCertificate> giftCertificateList = giftCertificateService.list();
@@ -42,14 +42,18 @@ public class GiftCertificateController {
         return model;
     }
 
-    @GetMapping ("/{id}")
-    @ResponseBody
-    public ResponseEntity<GiftCertificate> getGiftCertificate(@PathVariable long id) {
-        return new ResponseEntity<>(giftCertificateService.getGiftCertificateById(id), HttpStatus.OK);
+    @GetMapping("/{id}")
+    public GiftCertificate getGiftCertificate(@PathVariable long id) {
+        try {
+            return giftCertificateService.getGiftCertificateById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new GiftCertificateControllerException("Gift Certificate is not found", 40401, HttpStatus.NOT_FOUND);
+        }
+
     }
 
 
-    @PostMapping ("/add")
+    @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public GiftCertificate addGiftCertificate(@RequestBody GiftCertificateDto giftCertificateDto) {
 
@@ -60,21 +64,25 @@ public class GiftCertificateController {
         }
     }
 
-    @PutMapping ("/update")
+    @PutMapping("/update")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<GiftCertificateDto> updateGiftCertificate(@RequestBody GiftCertificateDto giftCertificateDto) {
+    public GiftCertificate updateGiftCertificate(@RequestBody GiftCertificateDto giftCertificateDto) {
 
-        GiftCertificate giftCertificate = giftCertificateService.updateGiftCertificate(giftCertificateDto);
-        if (giftCertificate ==null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        giftCertificateDto.setGiftCertificate(giftCertificate);
-        return new ResponseEntity<>(giftCertificateDto, HttpStatus.OK);
+        try {
+            return giftCertificateService.updateGiftCertificate(giftCertificateDto);
+        } catch (DuplicateKeyException e) {
+            throw new GiftCertificateControllerException("Name is already exist", 40001, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @DeleteMapping ("/{id}")
-    public ResponseEntity<Void> deleteGiftCertificate(@PathVariable long id) {
-        giftCertificateService.deleteGiftCertificate(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @DeleteMapping("/{id}")
+    public void deleteGiftCertificate(@PathVariable long id) {
+
+        try {
+            giftCertificateService.deleteGiftCertificate(id);
+        }  catch (EmptyResultDataAccessException e) {
+            throw new GiftCertificateControllerException("Gift Certificate is not found", 40401, HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/search")
@@ -83,7 +91,12 @@ public class GiftCertificateController {
                                            @RequestParam(defaultValue = "name", required = false) String orderColumn,
                                            @RequestParam(defaultValue = "false", required = false) boolean descending) {
 
-        return giftCertificateService.search(tagName, nameOrDescPart, orderColumn, descending);
+        try {
+            return giftCertificateService.search(tagName, "%" + nameOrDescPart + "%", orderColumn, descending);
+        } catch (EmptyResultDataAccessException e) {
+            throw new GiftCertificateControllerException("Gift Certificate is not found", 40401, HttpStatus.NOT_FOUND);
+        }
+
     }
 
 

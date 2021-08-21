@@ -28,26 +28,6 @@ public class GiftCertificate {
         this.id = id;
     }
 
-//    public GiftCertificate(Long id, String name, String description, double price, int duration, List<Tag> tags) {
-//        this(id, name, description, price, duration);
-//        this.tags = tags;
-//    }
-
-//    public GiftCertificate(Long id,
-//                           String name,
-//                           String description,
-//                           double price,
-//                           int duration,
-//                           ZonedDateTime createDate,
-//                           ZonedDateTime lastUpdateDate) {
-//        this(id, name, description, price, duration);
-//    }
-
-//    public boolean hasTags() {
-//        return !this.getTags().isEmpty();
-//    }
-
-
     public Long getId() {
         return id;
     }

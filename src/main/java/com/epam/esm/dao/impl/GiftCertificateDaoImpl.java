@@ -8,6 +8,8 @@ import com.epam.esm.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -28,7 +30,18 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             "SELECT cert.id, cert.name, cert.description, cert.price, cert.duration, cert.create_date, " +
                     "cert.last_update_date FROM gift_certificate cert " +
                     "JOIN gift_certificate_tag ref ON cert.id = ref.gift_certificate_id " +
-                    "JOIN tag ON tag.id = ref.tag_id WHERE tag.name= :tagName ORDER BY :order ;";
+                    "JOIN tag ON tag.id = ref.tag_id WHERE tag.name= :param0 ORDER BY :param1 ;";
+
+    private final static String GET_CERTIFICATES_BY_NAME_OR_DESCRIPTION_PART =
+            "SELECT * FROM gift_certificate WHERE name LIKE :param0 OR description LIKE :param0 ORDER BY :param1 ;";
+
+    static String GET_CERTIFICATES_BY_TAG_NAME_AND_NAME_OR_DESCRIPTION_PART =
+            "SELECT cert.id, cert.name, cert.description, cert.price, cert.duration, cert.create_date, " +
+                    "cert.last_update_date FROM gift_certificate cert " +
+                    "JOIN gift_certificate_tag ref ON cert.id = ref.gift_certificate_id " +
+                    "JOIN tag ON tag.id = ref.tag_id " +
+                    "WHERE tag.name= :param0 OR cert.name LIKE :param1 " +
+                    "OR cert.description LIKE :param1 ORDER BY :param2 ;";
 
     private final TagDao tagDao;
     private final DaoUtil daoUtil;
@@ -43,6 +56,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public GiftCertificate save(GiftCertificate cert, Set<Tag> tags) {
         saveTags(tags);
         GiftCertificate savedCertificate = saveGiftCertificate(cert);
@@ -136,19 +150,41 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public List<GiftCertificate> getByTagName(String tagName, String orderColumn, boolean descending) {
-        Map<String, String> paramMap = new HashMap<>();
-        paramMap.put("tagName", tagName);
-        paramMap.put("order", orderColumn);
-
         return daoUtil.getEntitiesBySql(
                 getSqlOrderDescending(GET_CERTIFICATES_BY_TAG_NAME, descending),
-                paramMap,
+                getMapFilledWithParams(tagName, orderColumn),
+                certMapper);
+    }
+
+    @Override
+    public List<GiftCertificate> getByNameOrDescrPart(String nameOrDescPart, String orderColumn, boolean descending) {
+        return daoUtil.getEntitiesBySql(
+                getSqlOrderDescending(GET_CERTIFICATES_BY_NAME_OR_DESCRIPTION_PART, descending),
+                getMapFilledWithParams(nameOrDescPart, orderColumn),
                 certMapper);
     }
 
 
+    @Override
+    public List<GiftCertificate> getByTagNameAndNameOrDescrPart(String tagName, String nameOrDescPart, String orderColumn, boolean descending) {
+        return daoUtil.getEntitiesBySql(
+                getSqlOrderDescending(GET_CERTIFICATES_BY_TAG_NAME_AND_NAME_OR_DESCRIPTION_PART, descending),
+                getMapFilledWithParams(tagName, nameOrDescPart, orderColumn),
+                certMapper);
+    }
+
+
+    private Map<String, String> getMapFilledWithParams(String... args) {
+        Map<String, String> paramMap = new HashMap<>();
+        for (int i = 0; i < args.length; i++) {
+            paramMap.put("param" + i, args[i]);
+        }
+        return paramMap;
+    }
+
+
     private String getSqlOrderDescending(String sql, boolean descending) {
-        return descending? sql.replace(";", "DESC;"): sql;
+        return descending ? sql.replace(";", "DESC;") : sql;
     }
 
 }

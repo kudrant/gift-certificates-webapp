@@ -32,4 +32,12 @@ public class GiftCertificateControllerException extends RuntimeException{
     protected GiftCertificateControllerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
+
+    public int getErrorCode() {
+        return errorCode;
+    }
+
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
 }

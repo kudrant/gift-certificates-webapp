@@ -55,21 +55,28 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificateDto> search(String tagName, String nameOrDescPart, String orderColumn, boolean descending) {
-
-        //certificatesWithTags.forEach();
+        List<GiftCertificateDto> certificatesWithTags;
         switch (getSearchType(tagName, nameOrDescPart)) {
             case BY_TAG:
-                List<GiftCertificateDto> certificatesWithTags = getGiftCertificateDtoWithCerts(
+                certificatesWithTags = getGiftCertificateDtoWithCerts(
                         giftCertificateDao.getByTagName(tagName, orderColumn, descending));
                 fillGiftCertificateDtoWithTags(certificatesWithTags);
                 return certificatesWithTags;
             case BY_NAME_OR_DESCR_PART:
-                break;
+                certificatesWithTags = getGiftCertificateDtoWithCerts(
+                        giftCertificateDao.getByNameOrDescrPart(nameOrDescPart, orderColumn, descending));
+                fillGiftCertificateDtoWithTags(certificatesWithTags);
+                return certificatesWithTags;
             case BY_TAG_AND_NAME_OR_DESCR_PART:
-                break;
+                certificatesWithTags = getGiftCertificateDtoWithCerts(
+                        giftCertificateDao.getByTagNameAndNameOrDescrPart(tagName, nameOrDescPart, orderColumn, descending));
+                fillGiftCertificateDtoWithTags(certificatesWithTags);
+                return certificatesWithTags;
             default:
+                certificatesWithTags = getGiftCertificateDtoWithCerts(giftCertificateDao.list());
+                fillGiftCertificateDtoWithTags(certificatesWithTags);
+                return certificatesWithTags;
         }
-        return null;
     }
 
     private List<GiftCertificateDto> getGiftCertificateDtoWithCerts(List<GiftCertificate> certList) {
@@ -82,9 +89,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         certDtoList.forEach(dto -> dto.setTags(tagService.getCertificateTags(dto.getGiftCertificate())));
     }
 
-
-
-    private boolean isParamExist (String param) {
+    private boolean isParamExist(String param) {
         return param.trim().length() > 0;
     }
 
@@ -96,10 +101,5 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         else if (isParamExist(nameOrDescPart))
             return SearchType.BY_NAME_OR_DESCR_PART;
         else return SearchType.ALL;
-
-
     }
-
-
-
 }

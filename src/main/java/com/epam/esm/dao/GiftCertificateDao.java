@@ -22,4 +22,8 @@ public interface GiftCertificateDao {
 
     List<GiftCertificate> getByTagName(String tagName, String orderColumn, boolean descending);
 
+    List<GiftCertificate> getByNameOrDescrPart(String nameOrDescPart,  String orderColumn, boolean descending);
+
+    List<GiftCertificate> getByTagNameAndNameOrDescrPart(String tagName, String nameOrDescPart,  String orderColumn, boolean descending);
+
 }

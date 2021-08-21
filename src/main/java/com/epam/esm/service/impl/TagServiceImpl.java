@@ -15,7 +15,7 @@ import java.util.Set;
 @Service
 public class TagServiceImpl implements TagService {
 
-      private final TagDao tagDao;
+    private final TagDao tagDao;
 
     @Autowired
     public TagServiceImpl(TagDao tagDao) {
@@ -39,7 +39,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> getTags() {
-        return null;
+        return tagDao.listTags();
     }
 
     @Override

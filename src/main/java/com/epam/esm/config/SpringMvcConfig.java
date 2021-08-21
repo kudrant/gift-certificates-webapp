@@ -1,6 +1,8 @@
 package com.epam.esm.config;
 
+import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.impl.DaoUtil;
+import com.epam.esm.dao.impl.GiftCertificateDaoImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,6 +11,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -62,15 +65,8 @@ public class SpringMvcConfig implements WebMvcConfigurer {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("WEB-INF/views/");
         resolver.setSuffix(".jsp");
-
         return resolver;
     }
-
-//    @Bean
-//    public GiftCertificateDao getGiftCertificateDAO() {
-//        return new GiftCertificateDaoImpl(getDataSource());
-//    }
-
 
     @Bean
     public DaoUtil getDaoUtil(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -81,8 +77,10 @@ public class SpringMvcConfig implements WebMvcConfigurer {
     public SimpleJdbcInsert getGiftCertificateTagSimpleJdbcInsert(JdbcTemplate jdbcTemplate) {
         return new SimpleJdbcInsert(jdbcTemplate).withTableName("gift_certificate_tag");
     }
-//    @Bean
-//    public TagDao getTagDao() {
-//        return new TagDaoImpl(getDataSource());
-//    }
+
+    @Bean
+    public DataSourceTransactionManager getDataSourceTransactionManager(DataSource dataSource) {
+        return new DataSourceTransactionManager(dataSource);
+    }
+
 }
