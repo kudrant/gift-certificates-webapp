@@ -45,9 +45,6 @@ public final class DaoUtil {
 
     <T> T getEntityBySql(String sql, Object param, RowMapper<T> rowMapper) {
         return namedParameterJdbcTemplate.queryForObject(sql, Collections.singletonMap("param", param), rowMapper);
-//        if (result.isEmpty())
-//            return null;
-//        return result.get(0);
     }
 
     <T> List<T> getReferencedEntities(String sql, GiftCertificate cert, RowMapper<T> mapper) {
