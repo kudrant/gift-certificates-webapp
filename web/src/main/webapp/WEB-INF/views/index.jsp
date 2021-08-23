@@ -27,9 +27,9 @@
                     <td>${giftCertificate.price}</td>
                     <td>${giftCertificate.duration}</td>
                     <td>
-                        <a href="${pageContext.request.contextPath}/edit?id=${giftCertificate.id}">Edit</a>
+                        <a href="${pageContext.request.contextPath}/update?value=${giftCertificate.id}">Edit</a>
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <a href="${pageContext.request.contextPath}/delete?id=${giftCertificate.id}">Delete</a>
+                        <a href="${pageContext.request.contextPath}/${giftCertificate.id}">Delete</a>
                     </td>
 
                 </tr>

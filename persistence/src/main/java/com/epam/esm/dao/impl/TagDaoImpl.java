@@ -54,7 +54,7 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public Tag getTagByName(String tagName) {
-        return daoUtil.getEntityBySql(GET_TAG_ID_BY_NAME, tagName, tagMapper);
+        return daoUtil.getSingleResultBySql(GET_TAG_ID_BY_NAME, tagName, tagMapper);
     }
 
     @Override

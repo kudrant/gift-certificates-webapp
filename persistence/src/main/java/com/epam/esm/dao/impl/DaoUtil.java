@@ -2,6 +2,7 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.entity.GiftCertificate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -48,6 +49,10 @@ public final class DaoUtil {
 
     <T> T getEntityBySql(String sql, Object param, RowMapper<T> rowMapper) {
         return namedParameterJdbcTemplate.queryForObject(sql, Collections.singletonMap("param", param), rowMapper);
+    }
+
+    <T> T getSingleResultBySql(String sql, Object param, RowMapper<T> rowMapper) {
+        return DataAccessUtils.singleResult(namedParameterJdbcTemplate.query(sql, Collections.singletonMap("param", param), rowMapper));
     }
 
     <T> List<T> getReferencedEntities(String sql, GiftCertificate cert, RowMapper<T> mapper) {

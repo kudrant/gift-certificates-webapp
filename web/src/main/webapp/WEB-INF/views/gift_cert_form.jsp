@@ -10,7 +10,7 @@
 <div align="center">
     <h1>New/Edit Gift Certificate</h1>
 
-    <form:form action="save" method="post" modelAttribute="giftCertificate">
+    <form:form action="save" method="post" modelAttribute="giftCertificateDto">
         <table cellpadding="5">
             <form:hidden path="id" />
             <tr>
@@ -24,10 +24,6 @@
             <tr>
                 <td>Price:</td>
                 <td><form:input path="price"/></td>
-            </tr>
-            <tr>
-                <td>Duration:</td>
-                <td><form:input path="duration"/></td>
             </tr>
             <tr>
                 <td colspan="2"><input type="submit" value="Save"/></td>
